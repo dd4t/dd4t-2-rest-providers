@@ -1,10 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 *.iml
-dd4t-providers/target/
 dd4t-rs/target/
-/dd4t-rs/src/main/resources/tridion-config/cd_link_conf.xml
-/dd4t-rs/src/main/resources/tridion-config/cd_dynamic_conf.xml
-/dd4t-rs/src/main/resources/tridion-config/cd_ambient_conf.xml
-/dd4t-rs/src/main/resources/tridion-config/cd_storage_conf.xml
-/dd4t-rs/src/main/resources/tridion-config/cd_licenses.xml
-/dd4t-rs/src/main/resources/tridion-config/cd_ambient_cartridge_conf.xml
+/dd4t-rs/src/main/resources/cd_*_conf.xml
+/dd4t-rs/src/main/resources/cd_licenses.xml
