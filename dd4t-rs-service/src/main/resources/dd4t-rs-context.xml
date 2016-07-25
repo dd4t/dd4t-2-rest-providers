@@ -3,8 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- Change for infinispan -->
+    <!-- Change here for infinispan -->
     <bean id="cacheProvider" class="org.dd4t.core.providers.EHCacheProvider" />
 
+    <!-- TODO: add JMS listener -->
 
 </beans>

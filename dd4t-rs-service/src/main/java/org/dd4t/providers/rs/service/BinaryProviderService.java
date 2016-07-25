@@ -57,7 +57,7 @@ public class BinaryProviderService {
         RequestContextRegistry.setCurrentRequestContext(new BasicRequestContext(request));
 
         try {
-            result = TridionBinaryProvider.INSTANCE.getBinaryContentById(id, publication);
+            result = TridionBinaryProvider.getInstance().getBinaryContentById(id, publication);
         } catch (StorageException e) {
             LOG.error("Error fetching binary content", e);
         } catch (ItemNotFoundException e) {
@@ -94,7 +94,7 @@ public class BinaryProviderService {
         RequestContextRegistry.setCurrentRequestContext(new BasicRequestContext(request));
 
         try {
-            result = TridionBinaryProvider.INSTANCE.getBinaryContentByURL(url, publication);
+            result = TridionBinaryProvider.getInstance().getBinaryContentByURL(url, publication);
         } catch (StorageException e) {
             LOG.error("Error fetching binary content", e);
         } catch (ItemNotFoundException e) {
@@ -132,7 +132,7 @@ public class BinaryProviderService {
 
         String result = null;
         try {
-            result = TridionBinaryProvider.INSTANCE.getBinaryMetaById(id, publication);
+            result = TridionBinaryProvider.getInstance().getBinaryMetaById(id, publication);
         } catch (IOException | StorageException e) {
             LOG.error("Error fetching binary meta", e);
         } catch (ItemNotFoundException e) {
@@ -170,7 +170,7 @@ public class BinaryProviderService {
 
         String result = null;
         try {
-            result = TridionBinaryProvider.INSTANCE.getBinaryMetaByURL(url, publication);
+            result = TridionBinaryProvider.getInstance().getBinaryMetaByURL(url, publication);
         } catch (IOException | StorageException e) {
             LOG.error("Error fetching binary meta", e);
         } catch (ItemNotFoundException e) {
@@ -206,7 +206,7 @@ public class BinaryProviderService {
 
         byte[] result = null;
         try {
-            result = TridionBinaryProvider.INSTANCE.getWrapperById(id, publication);
+            result = TridionBinaryProvider.getInstance().getWrapperById(id, publication);
         } catch (IOException | StorageException e) {
             LOG.error("Error fetching binary", e);
         } catch (ItemNotFoundException e) {
@@ -242,7 +242,7 @@ public class BinaryProviderService {
 
         byte[] result = null;
         try {
-            result = TridionBinaryProvider.INSTANCE.getWrapperByURL(url, publication);
+            result = TridionBinaryProvider.getInstance().getWrapperByURL(url, publication);
         } catch (IOException | StorageException e) {
             LOG.error("Error fetching binary", e);
         } catch (ItemNotFoundException e) {
@@ -274,7 +274,7 @@ public class BinaryProviderService {
 
         int result = 0;
         try {
-            result = TridionBinaryProvider.INSTANCE.discoverPublicationId(imagesUrl);
+            result = TridionBinaryProvider.getInstance().discoverPublicationId(imagesUrl);
         } catch (ParseException | StorageException e) {
             LOG.error("Error discovering Publication", e);
         } catch (ItemNotFoundException e) {

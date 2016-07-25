@@ -23,6 +23,7 @@
         <!-- Versions -->
         <activemq.version>5.10.0</activemq.version>
         <dd4t.version>2.0.5</dd4t.version>
+        <easylicense.version>2.5</easylicense.version>
         <spring.version>3.1.0.RELEASE</spring.version>
         <tridion.version>7.1.0</tridion.version>
         <hibernate.version>4.0.1.Final</hibernate.version>
@@ -30,6 +31,7 @@
         <resteasy.version>3.0.18.Final</resteasy.version>
         <jackson-datatype-joda.version>2.4.1</jackson-datatype-joda.version>
         <jackson.version>2.6.4</jackson.version>
+        <javax.jms.version>1.1-rev-1</javax.jms.version>
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
     </properties>
 
@@ -66,7 +68,11 @@
                 <artifactId>dd4t-core</artifactId>
                 <version>${dd4t.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.dd4t</groupId>
+                <artifactId>dd4t-providers-common</artifactId>
+                <version>${dd4t.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.dd4t</groupId>
                 <artifactId>dd4t-providers</artifactId>
@@ -140,6 +146,11 @@
             </dependency>
             <dependency>
                 <groupId>com.tridion</groupId>
+                <artifactId>cd_dynamic</artifactId>
+                <version>${tridion.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tridion</groupId>
                 <artifactId>cd_linking</artifactId>
                 <version>${tridion.version}</version>
             </dependency>
@@ -193,8 +204,15 @@
             <dependency>
                 <groupId>com.vs</groupId>
                 <artifactId>easylicense</artifactId>
-                <version>1.0.0</version>
+                <version>${easylicense.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.jms</groupId>
+                <artifactId>jms-api</artifactId>
+                <version>${javax.jms.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>

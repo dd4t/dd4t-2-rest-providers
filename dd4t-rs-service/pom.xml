@@ -65,6 +65,10 @@
         </dependency>
         <dependency>
             <groupId>org.dd4t</groupId>
+            <artifactId>dd4t-providers-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dd4t</groupId>
             <artifactId>dd4t-providers</artifactId>
         </dependency>
 
@@ -109,6 +113,10 @@
         </dependency>
         <dependency>
             <groupId>com.tridion</groupId>
+            <artifactId>cd_dynamic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tridion</groupId>
             <artifactId>cd_linking</artifactId>
         </dependency>
         <dependency>
@@ -129,6 +137,10 @@
         </dependency>
 
         <!-- Start Tridion needed libs -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -168,8 +180,7 @@
 
         <dependency>
             <groupId>javax.jms</groupId>
-            <artifactId>jms</artifactId>
-            <version>1.1</version>
+            <artifactId>jms-api</artifactId>
             <scope>compile</scope>
         </dependency>
 

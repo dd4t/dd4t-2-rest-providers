@@ -45,12 +45,7 @@ public class LinkProviderService {
 
         RequestContextRegistry.setCurrentRequestContext(new BasicRequestContext(request));
 
-        String result = null;
-        try {
-            result = TridionLinkProvider.INSTANCE.resolveComponent(targetComponentURI);
-        } catch (ParseException e) {
-            LOG.error("Error resolving link to Component", e);
-        }
+        String result = TridionLinkProvider.getInstance().resolveComponent(targetComponentURI);
 
         RequestContextRegistry.removeCurrentRequestContext();
 
@@ -83,7 +78,7 @@ public class LinkProviderService {
 
         String result = null;
         try {
-            result = TridionLinkProvider.INSTANCE.resolveComponentById(id, publication);
+            result = TridionLinkProvider.getInstance().resolveComponentById(id, publication);
         } catch (ParseException e) {
             LOG.error("Error resolving link to Component", e);
         }
@@ -117,12 +112,7 @@ public class LinkProviderService {
 
         RequestContextRegistry.setCurrentRequestContext(new BasicRequestContext(request));
 
-        String result = null;
-        try {
-            result = TridionLinkProvider.INSTANCE.resolveComponentFromPage(targetComponentURI, sourcePageURI);
-        } catch (ParseException e) {
-            LOG.error("Error resolving link to Component", e);
-        }
+        String result = TridionLinkProvider.getInstance().resolveComponentFromPage(targetComponentURI, sourcePageURI);
 
         RequestContextRegistry.removeCurrentRequestContext();
 
@@ -157,7 +147,7 @@ public class LinkProviderService {
 
         String result = null;
         try {
-            result = TridionLinkProvider.INSTANCE.resolveComponentFromPageById(componentId, pageId, publicationId);
+            result = TridionLinkProvider.getInstance().resolveComponentFromPageById(componentId, pageId, publicationId);
         } catch (ParseException e) {
             LOG.error("Error resolving link to Component", e);
         }

@@ -33,12 +33,13 @@ public class BinaryBuilder {
         result.setCustomProperties(buildCustomProperties(variant));
         //result.setHeight();
         ComponentMeta multimediaMeta = variant.getBinaryMeta().getMultimediaMeta();
-        result.setLastPublishDate(new DateTime(multimediaMeta.getLastPublishDate()));
+        result.setLastPublishedDate(new DateTime(multimediaMeta.getLastPublishDate()));
         result.setMimeType(variant.getBinaryType());
         result.setOrganizationalItem(buildOrganizationalItem(variant));
         result.setOwningPublication(buildOwningPublication(variant));
         result.setPublication(buildPublication(variant));
-        result.setSchema(buildSchema(variant));
+        // TODO: setSchema dropped off.. bac in 2.0.6
+        //result.setBinaryData(buildSchema(variant));
         result.setTitle(multimediaMeta.getTitle());
         //result.setWidth();
 

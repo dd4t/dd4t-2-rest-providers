@@ -16,7 +16,6 @@ import com.tridion.broker.querying.sorting.SortDirection;
 import com.tridion.broker.querying.sorting.SortParameter;
 import com.tridion.broker.querying.sorting.column.ComponentSchemaColumn;
 import com.tridion.broker.querying.sorting.column.ItemLastPublishColumn;
-import com.tridion.storage.ComponentPresentation;
 import com.tridion.storage.CustomMetaValue;
 import com.tridion.storage.StorageTypeMapping;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -25,7 +24,8 @@ import org.dd4t.core.caching.CacheElement;
 import org.dd4t.core.caching.CacheType;
 import org.dd4t.core.exceptions.ItemNotFoundException;
 import org.dd4t.core.exceptions.SerializationException;
-import org.dd4t.core.util.DaoUtils;
+import org.dd4t.providers.rs.utils.DaoUtils;
+import org.dd4t.providers.rs.utils.RsCacheType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,11 +58,11 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 
 	}
 
-	public TridionCustomMetaQueryProvider getInstance() {
+	public static TridionCustomMetaQueryProvider getInstance() {
 		return INSTANCE;
 	}
 
-	public String getComponentsByCustomMeta (String locale, final MultivaluedMap<String, String> queryStringCollection, int templateId) throws ParseException, StorageException, ItemNotFoundException, IOException {
+	public String getComponentsByCustomMeta (String locale, final MultivaluedMap<String, String> queryStringCollection, int templateId) throws ItemNotFoundException, SerializationException, StorageException, ParseException, UnsupportedEncodingException {
 		LOG.debug("Performing Custom Meta Query for {}, {}", locale, queryStringCollection.toString());
 
 		final int publicationId = getPublicationId(locale);
@@ -84,10 +84,9 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 					cacheElement.setExpired(false);
 
 					final StringBuilder components = new StringBuilder();
-					final List<ComponentPresentation> componentPresentations = getCustomMetaQueryComponentPresentations(queryStringCollection, templateId, publicationId);
-					for (ComponentPresentation componentPresentation : componentPresentations) {
-						LOG.debug("Loading {}", componentPresentation.getComponentId());
-						components.append(new String(componentPresentation.getContent(), "UTF-8"));
+					final List<String> componentPresentations = getCustomMetaQueryComponentPresentations(queryStringCollection, templateId, publicationId);
+					for (String componentPresentation : componentPresentations) {
+						components.append(componentPresentation);
 						components.append(DIVIDER);
 					}
 
@@ -137,7 +136,7 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 		final int publicationId = getPublicationId(locale);
 		LOG.debug("Publication Id is: {}", publicationId);
 
-		final String key = getKey(CacheType.CustomMetaValuesForKey, publicationId, metaKey, 0);
+		final String key = getKey(RsCacheType.CUSTOM_META_VALUES_FOR_KEY, publicationId, metaKey, 0);
 		CacheElement<String> cacheElement = cacheProvider.loadPayloadFromLocalCache(key);
 		String result = null;
 
@@ -197,7 +196,7 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 	 * @throws StorageException
 	 * @throws ItemNotFoundException
 	 */
-	public String getComponentsBySchema (String locale, String schema, int templateId) throws ParseException, StorageException, ItemNotFoundException, IOException {
+	public String getComponentsBySchema (String locale, String schema, int templateId) throws ParseException, StorageException, ItemNotFoundException, IOException, SerializationException {
 		LOG.debug("Performing Schema Query for {}, {}", locale, schema);
 		final int publicationId = getPublicationId(locale);
 		LOG.debug("Publication Id is: {}", publicationId);
@@ -218,13 +217,13 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 					if (itemUris == null || itemUris.length == 0) {
 						LOG.debug("No results found.");
 						result = "";
+						cacheElement.setExpired(true);
 					} else {
 						LOG.debug("Found {} results.", itemUris.length);
 						final StringBuilder components = new StringBuilder();
-						final List<ComponentPresentation> componentPresentations = TridionComponentPresentationProvider.getInstance().getComponentPresentations(itemUris, templateId, publicationId);
-						for (ComponentPresentation componentPresentation : componentPresentations) {
-							LOG.debug("Loading {}", componentPresentation.getComponentId());
-							components.append(new String(componentPresentation.getContent(), "UTF-8"));
+						final List<String> componentPresentations = TridionComponentPresentationProvider.getInstance().getDynamicComponentPresentations(itemUris, templateId, publicationId);
+						for (String componentPresentation : componentPresentations) {
+							components.append(componentPresentation);
 							components.append(DIVIDER);
 						}
 
@@ -268,14 +267,14 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 	}
 
 
-	public String getComponentsBySchemaInKeyword (String locale, String schema, int categoryId, int keywordId, int templateId) throws ParseException, StorageException, ItemNotFoundException, IOException {
+	public String getComponentsBySchemaInKeyword (String locale, String schema, int categoryId, int keywordId, int templateId) throws ItemNotFoundException {
 		LOG.debug("Performing Schema Query for {}, {}, in Keyword: {}", new Object[]{locale, schema, keywordId});
 		final int publicationId = getPublicationId(locale);
 		LOG.debug("Publication Id is: {}", publicationId);
 
 		final String key = getKey(CacheType.COMPONENTS_BY_SCHEMA_IN_KEYWORD, publicationId, schema + "-" + keywordId, templateId);
 		CacheElement<String> cacheElement = cacheProvider.loadPayloadFromLocalCache(key);
-		String result;
+		String result = null;
 
 		if (cacheElement.isExpired()) {
 			//noinspection SynchronizationOnLocalVariableOrMethodParameter
@@ -293,30 +292,35 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 					query.addSorting(sortParameter);
 					query.setResultFilter(new LimitFilter(MAX_SEARCH_RESULTS));
 
-					final String[] itemUris = query.executeQuery();
+					try {
+						final String[] itemUris = query.executeQuery();
 
-					if (itemUris == null || itemUris.length == 0) {
-						LOG.debug("No results found.");
-						result = "";
-					} else {
-						LOG.debug("Found {} results.", itemUris.length);
-						final StringBuilder components = new StringBuilder();
+						if (itemUris == null || itemUris.length == 0) {
+							LOG.debug("No results found.");
+							cacheElement.setExpired(true);
+						} else {
+							LOG.debug("Found {} results.", itemUris.length);
+							final StringBuilder components = new StringBuilder();
 
-						List<ComponentPresentation> componentPresentations = TridionComponentPresentationProvider.getInstance().getComponentPresentations(itemUris, templateId, publicationId);
+							List<String> componentPresentations = TridionComponentPresentationProvider.getInstance().getDynamicComponentPresentations(itemUris, templateId, publicationId);
 
-						for (ComponentPresentation componentPresentation : componentPresentations) {
-							LOG.debug("appending {}", componentPresentation.getComponentId());
-							components.append(new String(componentPresentation.getContent(), "UTF-8"));
-							components.append(DIVIDER);
+							for (String componentPresentation : componentPresentations) {
+								components.append(componentPresentation);
+								components.append(DIVIDER);
+							}
+
+							LOG.trace("Returning: {}", components);
+							result = components.toString();
 						}
 
-						LOG.trace("Returning: {}", components);
-						result = components.toString();
+						LOG.debug("Storing result in cache.");
+						cacheElement.setPayload(result);
+						cacheProvider.storeInItemCache(key, cacheElement);
+					} catch (StorageException | SerializationException | ItemNotFoundException e) {
+						LOG.error(e.getLocalizedMessage(),e);
+						cacheElement.setExpired(true);
 					}
 
-					LOG.debug("Storing result in cache.");
-					cacheElement.setPayload(result);
-					cacheProvider.storeInItemCache(key, cacheElement);
 				} else {
 					LOG.debug("Retrieving from cache");
 					result = cacheElement.getPayload();
@@ -333,6 +337,11 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 
 		return result;
 	}
+
+    //FIXME
+    private String getKey (RsCacheType type, int publicationId, String schema, int template) {
+        return String.format("%s-%d-%s-%d", type, publicationId, schema, template);
+    }
 
 	private String getKey (CacheType type, int publicationId, String schema, int template) {
 		return String.format("%s-%d-%s-%d", type, publicationId, schema, template);
@@ -387,10 +396,10 @@ public class TridionCustomMetaQueryProvider extends TridionBaseProvider {
 		return query.executeQuery();
 	}
 
-	private int getPublicationId(String input) throws ParseException, StorageException, ItemNotFoundException {
+	private int getPublicationId(String input) {
 		int publicationId = getInteger(input);
 		if (publicationId < 0) {
-			publicationId = TridionPageProvider.INSTANCE.discoverPublicationId(input);
+			publicationId = TridionPublicationProvider.getInstance().discoverPublicationIdByPageUrlPath(input);
 		}
 		return publicationId;
 	}

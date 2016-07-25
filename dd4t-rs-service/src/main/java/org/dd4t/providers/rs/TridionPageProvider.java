@@ -19,23 +19,10 @@ import java.io.IOException;
 import java.text.ParseException;
 
 /**
- * Created by rai on 01/05/14.
+ * @author Rai
+ * @since 01/05/14.
  */
 
-// We don't use @singleton
-/*
- * TODO: Test properly whether publication Ids are always correct
- * TODO: url must be properly encoded / decoded. Preferably this becomes
- * a unique garbled string
- *
- * We don't directly hook into the BrokerPageProvider class
- * because we may need to do decompression, XML > Json,
- * and other assorted operations.
- *
- * Plus, we want to have a singleton instance
- * (but that could also move into the service class).
- *
- */
 public class TridionPageProvider extends TridionBaseProvider implements PageProvider {
     private final BrokerPageProvider pageProvider = new BrokerPageProvider();
     private final static Logger LOG = LoggerFactory.getLogger(TridionPageProvider.class);

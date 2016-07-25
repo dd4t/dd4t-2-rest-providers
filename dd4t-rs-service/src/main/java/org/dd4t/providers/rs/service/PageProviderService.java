@@ -1,9 +1,9 @@
 package org.dd4t.providers.rs.service;
 
-import com.tridion.broker.StorageException;
 import org.dd4t.core.exceptions.ItemNotFoundException;
 import org.dd4t.core.exceptions.SerializationException;
 import org.dd4t.providers.rs.TridionPageProvider;
+import org.dd4t.providers.rs.TridionPublicationProvider;
 import org.dd4t.providers.rs.request.BasicRequestContext;
 import org.dd4t.providers.rs.request.RequestContextRegistry;
 import org.dd4t.providers.serializer.SerializerFactory;
@@ -19,7 +19,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.text.ParseException;
 
 /**
  * JAX-RS services class that defines and implements the service methods for fetching page metadata and content from
@@ -222,14 +221,7 @@ public class PageProviderService {
         long time = System.currentTimeMillis();
         LOG.debug(">> Discover Publication id for publicationUrl: {}", publicationUrl);
 
-        int result = 0;
-        try {
-            result = TridionPageProvider.INSTANCE.discoverPublicationId(publicationUrl);
-        } catch (ParseException | StorageException e) {
-            LOG.error("Error discovering Publication", e);
-        } catch (ItemNotFoundException e) {
-            LOG.info("Publication not found for publicationUrl: {}", publicationUrl);
-        }
+        int result = TridionPublicationProvider.getInstance().discoverPublicationIdByPageUrlPath(publicationUrl);
 
         time = System.currentTimeMillis() - time;
         LOG.debug("<< End discover Publication id. Duration: {}s", time / 1000.0);

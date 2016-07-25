@@ -1,6 +1,6 @@
 package org.dd4t.providers.rs.service;
 
-import org.dd4t.contentmodel.exceptions.ItemNotFoundException;
+import org.dd4t.core.exceptions.ItemNotFoundException;
 import org.dd4t.providers.rs.TridionTaxonomyProvider;
 import org.dd4t.providers.rs.request.BasicRequestContext;
 import org.dd4t.providers.rs.request.RequestContextRegistry;
@@ -71,7 +71,7 @@ public class TaxonomyProviderService {
 
         String result = null;
         try {
-            result = TridionTaxonomyProvider.INSTANCE.getTaxonomy(taxonomyURI, resolveContent);
+            result = TridionTaxonomyProvider.getInstance().getTaxonomy(taxonomyURI, resolveContent);
         } catch (IOException | ItemNotFoundException | ParseException e) {
             LOG.error("Error fetching taxonomy", e);
         }
@@ -113,7 +113,7 @@ public class TaxonomyProviderService {
 
         String result = null;
         try {
-            result = TridionTaxonomyProvider.INSTANCE.getTaxonomyRelatedBySchema(taxonomyURI, schemaURI);
+            result = TridionTaxonomyProvider.getInstance().getTaxonomyRelatedBySchema(taxonomyURI, schemaURI);
         } catch (IOException | ItemNotFoundException | ParseException e) {
             LOG.error("Error fetching taxonomy", e);
         }

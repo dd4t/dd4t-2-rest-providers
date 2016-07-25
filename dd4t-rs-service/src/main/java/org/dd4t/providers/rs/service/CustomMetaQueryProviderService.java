@@ -2,7 +2,8 @@ package org.dd4t.providers.rs.service;
 
 import com.tridion.broker.StorageException;
 import org.apache.commons.codec.binary.Base64;
-import org.dd4t.contentmodel.exceptions.ItemNotFoundException;
+import org.dd4t.core.exceptions.ItemNotFoundException;
+import org.dd4t.core.exceptions.SerializationException;
 import org.dd4t.providers.rs.TridionCustomMetaQueryProvider;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class CustomMetaQueryProviderService {
      * @param locale        The Locale string, eg. en_be
      * @param uriInfo       The URL of this request, including querystring which has all Custommeta params. Auto filled by JAX
      * @param encodedParams The actual custom meta query parameters
-     * @param templateId
+     * @param templateId    The Component Template Id
      * @return a Base64 encoded, GZipped String of dynamic components, seperated by |.
      */
     @GET
@@ -69,10 +70,10 @@ public class CustomMetaQueryProviderService {
 
 
                 UriInfo decodedUriInfo = new ResteasyUriInfo("",decodedValue,"");
-                return TridionCustomMetaQueryProvider.INSTANCE.getComponentsByCustomMeta(locale,
+                return TridionCustomMetaQueryProvider.getInstance().getComponentsByCustomMeta(locale,
                         decodedUriInfo.getQueryParameters(), templateId);
 
-            } catch (ParseException | StorageException | IOException e) {
+            } catch (ParseException | StorageException | IOException | SerializationException e) {
                 LOG.error(e.getMessage(), e);
             } catch (ItemNotFoundException e) {
                 LOG.info("Something was not found: {}", e.getMessage());
@@ -90,8 +91,8 @@ public class CustomMetaQueryProviderService {
                                                     @Context HttpServletRequest request) {
         try {
             String decodedSchema = decodeUrl(schema);
-            return TridionCustomMetaQueryProvider.INSTANCE.getComponentsBySchema(locale, decodedSchema, 0);
-        } catch (ParseException | StorageException | IOException e) {
+            return TridionCustomMetaQueryProvider.getInstance().getComponentsBySchema(locale, decodedSchema, 0);
+        } catch (ParseException | SerializationException | StorageException | IOException e) {
             LOG.error(e.getMessage(), e);
         } catch (ItemNotFoundException e) {
             LOG.info("Something wasn't found: {}", e.getMessage());
@@ -109,8 +110,8 @@ public class CustomMetaQueryProviderService {
                                                     @Context HttpServletRequest request) {
         try {
             String decodedSchema = decodeUrl(schema);
-            return TridionCustomMetaQueryProvider.INSTANCE.getComponentsBySchema(locale, decodedSchema, templateId);
-        } catch (ParseException | StorageException | IOException e) {
+            return TridionCustomMetaQueryProvider.getInstance().getComponentsBySchema(locale, decodedSchema, templateId);
+        } catch (ParseException | SerializationException | StorageException | IOException e) {
             LOG.error(e.getMessage(), e);
         } catch (ItemNotFoundException e) {
             LOG.info("Something wasn't found: {}", e.getMessage());
@@ -129,9 +130,7 @@ public class CustomMetaQueryProviderService {
 	                                                         @DefaultValue ("0") @PathParam ("templateid") final int templateId) {
 		try {
 			String decodedSchema = decodeUrl(schema);
-			return TridionCustomMetaQueryProvider.INSTANCE.getComponentsBySchemaInKeyword(locale, decodedSchema,categoryId,keywordId, templateId);
-		} catch (ParseException | StorageException | IOException e) {
-			LOG.error(e.getMessage(), e);
+			return TridionCustomMetaQueryProvider.getInstance().getComponentsBySchemaInKeyword(locale, decodedSchema,categoryId,keywordId, templateId);
 		} catch (ItemNotFoundException e) {
 			LOG.info("Something wasn't found or died: {}", e.getMessage());
 		}
@@ -144,7 +143,7 @@ public class CustomMetaQueryProviderService {
 
         try {
             final String decodedMetaKey = decodeUrl(metakey);
-            return TridionCustomMetaQueryProvider.INSTANCE.getValuesForCustomMetaKey(locale,decodedMetaKey);
+            return TridionCustomMetaQueryProvider.getInstance().getValuesForCustomMetaKey(locale,decodedMetaKey);
         } catch (ParseException | ItemNotFoundException | StorageException e) {
             LOG.error(e.getMessage(), e);
         }

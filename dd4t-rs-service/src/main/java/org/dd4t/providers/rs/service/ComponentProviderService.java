@@ -1,6 +1,7 @@
 package org.dd4t.providers.rs.service;
 
 import org.dd4t.core.exceptions.ItemNotFoundException;
+import org.dd4t.core.exceptions.SerializationException;
 import org.dd4t.providers.rs.TridionComponentPresentationProvider;
 import org.dd4t.providers.rs.request.BasicRequestContext;
 import org.dd4t.providers.rs.request.RequestContextRegistry;
@@ -16,7 +17,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 
 /**
  * JAX-RS services class that defines and implements the service methods for fetching Dynamic Component Presentation
@@ -83,8 +83,8 @@ public class ComponentProviderService {
 
         String result = null;
         try {
-            result = TridionComponentPresentationProvider.INSTANCE.getDynamicComponentPresentation(componentId, templateId, publicationId);
-        } catch (IOException e) {
+            result = TridionComponentPresentationProvider.getInstance().getDynamicComponentPresentation(componentId, templateId, publicationId);
+        } catch (SerializationException e) {
             LOG.error("Error fetching Component Presentation", e);
         } catch (ItemNotFoundException e) {
             LOG.info("Component Presentation not found by componentId: {}, templateId: {} and publicationId: {}",

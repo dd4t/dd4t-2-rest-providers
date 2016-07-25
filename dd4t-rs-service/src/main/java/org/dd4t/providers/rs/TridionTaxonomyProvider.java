@@ -10,7 +10,6 @@ import org.dd4t.core.caching.CacheType;
 import org.dd4t.core.exceptions.ItemNotFoundException;
 import org.dd4t.core.exceptions.SerializationException;
 import org.dd4t.core.util.TCMURI;
-import org.dd4t.providers.PayloadCacheProvider;
 import org.dd4t.providers.impl.BrokerTaxonomyProvider;
 import org.dd4t.providers.serializer.KeywordBuilder;
 import org.dd4t.providers.serializer.SerializerFactory;
@@ -36,15 +35,19 @@ import java.util.TreeSet;
  * @author Mihai Cadariu
  * @since 16.06.14
  */
-public enum TridionTaxonomyProvider {
+public class TridionTaxonomyProvider extends TridionBaseProvider {
 
-    INSTANCE;
-    private final static Logger LOG = LoggerFactory.getLogger(TridionTaxonomyProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TridionTaxonomyProvider.class);
+    private static final TridionTaxonomyProvider INSTANCE = new TridionTaxonomyProvider();
+
     private final BrokerTaxonomyProvider taxonomyProvider = new BrokerTaxonomyProvider();
-    private final PayloadCacheProvider cacheProvider;
 
     private TridionTaxonomyProvider() {
-        cacheProvider = CacheProviderFactory.getCacheProvider();
+
+    }
+
+    public static TridionTaxonomyProvider getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -68,6 +71,7 @@ public enum TridionTaxonomyProvider {
         String result;
 
         if (cacheElement.isExpired()) {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (cacheElement) {
                 if (cacheElement.isExpired()) {
                     cacheElement.setExpired(false);
@@ -135,6 +139,7 @@ public enum TridionTaxonomyProvider {
         String result;
 
         if (cacheElement.isExpired()) {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (cacheElement) {
                 if (cacheElement.isExpired()) {
                     cacheElement.setExpired(false);
@@ -191,6 +196,7 @@ public enum TridionTaxonomyProvider {
         Map<String, Set<TCMURI>> result;
 
         if (cacheElement.isExpired()) {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (cacheElement) {
                 if (cacheElement.isExpired()) {
                     cacheElement.setExpired(false);
@@ -239,6 +245,7 @@ public enum TridionTaxonomyProvider {
         Map<String, Set<TCMURI>> result;
 
         if (cacheElement.isExpired()) {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (cacheElement) {
                 if (cacheElement.isExpired()) {
                     cacheElement.setExpired(false);

@@ -1,4 +1,4 @@
-package org.dd4t.providers.rs;
+package org.dd4t.providers.rs.utils;
 
 import com.tridion.broker.StorageException;
 import com.tridion.storage.StorageManagerFactory;
