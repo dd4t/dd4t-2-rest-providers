@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 *.iml
 dd4t-rs-service/target/
-/dd4t-rs-service/src/main/resources/cd_*_conf.xml
-/dd4t-rs-service/src/main/resources/cd_licenses.xml
+dd4t-rs-service/src/main/resources/cd_*_conf.xml
+dd4t-rs-service/src/main/resources/cd_licenses.xml
