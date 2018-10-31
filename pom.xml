@@ -24,7 +24,7 @@
         <activemq.version>5.15.7</activemq.version>
         <dd4t.version>2.0.5</dd4t.version>
         <easylicense.version>2.5</easylicense.version>
-        <spring.version>3.1.0.RELEASE</spring.version>
+        <spring.version>4.3.19.RELEASE</spring.version>
         <tridion.version>7.1.0</tridion.version>
         <hibernate.version>4.0.1.Final</hibernate.version>
         <jersey.version>2.8</jersey.version>
