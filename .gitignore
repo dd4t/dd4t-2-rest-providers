@@ -3,3 +3,5 @@
 dd4t-rs-service/target/
 dd4t-rs-service/src/main/resources/cd_*_conf.xml
 dd4t-rs-service/src/main/resources/cd_licenses.xml
+.idea
+*.versionsBackup

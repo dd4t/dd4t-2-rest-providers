@@ -11,6 +11,7 @@ import org.dd4t.providers.serializer.json.JSONSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -25,7 +26,9 @@ import java.util.List;
 public class TridionComponentPresentationProvider extends TridionBaseProvider implements ComponentPresentationProvider {
 
     private final static Logger LOG = LoggerFactory.getLogger(TridionComponentPresentationProvider.class);
-    private final BrokerComponentPresentationProvider componentProvider = new BrokerComponentPresentationProvider();
+
+    @Resource(name = "componentPresentationProvider")
+    private BrokerComponentPresentationProvider componentPresentationProvider;
     private static final TridionComponentPresentationProvider INSTANCE = new TridionComponentPresentationProvider();
 
     private TridionComponentPresentationProvider () {
@@ -35,6 +38,7 @@ public class TridionComponentPresentationProvider extends TridionBaseProvider im
     public static TridionComponentPresentationProvider getInstance() {
         return INSTANCE;
     }
+
 
     /**
      * Retrieves content of a Dynamic Component Presentation by looking up its componentId and publicationId.
@@ -84,7 +88,7 @@ public class TridionComponentPresentationProvider extends TridionBaseProvider im
                     try {
                         long start = System.currentTimeMillis();
 
-                        result = componentProvider.getDynamicComponentPresentation(componentId, templateId, publicationId);
+                        result = componentPresentationProvider.getDynamicComponentPresentation(componentId, templateId, publicationId);
                         LOG.debug("GET COMPONENT: {} ms.",(System.currentTimeMillis()-start));
 
 
@@ -132,7 +136,7 @@ public class TridionComponentPresentationProvider extends TridionBaseProvider im
 
     @Override
     public List<String> getDynamicComponentPresentations (final String[] tcmUris, int templateId, int publicationId) throws ItemNotFoundException, SerializationException {
-        return componentProvider.getDynamicComponentPresentations(tcmUris,templateId,publicationId);
+        return componentPresentationProvider.getDynamicComponentPresentations(tcmUris,templateId,publicationId);
     }
 
     /**

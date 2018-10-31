@@ -1,6 +1,13 @@
 <html>
 <body>
     <h2>RestEasy RESTful Web Application!</h2>
-    <p><a href="providers/page/getpagexml/1/garbled">Page Providers</a></p>
+    <h3>Page Providers</h3>
+
+    <ul>
+        <li><a href="providers/page/getlistbypublication/14">Get Page lust for Publication 14</a></li>
+        <li><a href="providers/page/getcontentbyid/14/5351">Get Page lust for Publication 14</a></li>
+    </ul>
+
+
 </body>
 </html>

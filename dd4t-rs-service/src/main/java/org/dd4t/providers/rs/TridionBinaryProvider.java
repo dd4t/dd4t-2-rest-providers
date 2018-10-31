@@ -39,12 +39,21 @@ import java.text.ParseException;
 public class TridionBinaryProvider extends TridionBaseProvider {
 
     private final static Logger LOG = LoggerFactory.getLogger(TridionBinaryProvider.class);
-    private final BrokerBinaryProvider binaryProvider = new BrokerBinaryProvider();
+
+    private BrokerBinaryProvider binaryProvider;
     private static final TridionBinaryProvider INSTANCE = new TridionBinaryProvider();
 
 
     private TridionBinaryProvider() {
 
+    }
+
+    public BrokerBinaryProvider getBinaryProvider () {
+        return binaryProvider;
+    }
+
+    public void setBinaryProvider (final BrokerBinaryProvider binaryProvider) {
+        this.binaryProvider = binaryProvider;
     }
 
     public static TridionBinaryProvider getInstance() {

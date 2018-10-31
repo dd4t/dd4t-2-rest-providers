@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -24,13 +25,23 @@ import java.text.ParseException;
  */
 
 public class TridionPageProvider extends TridionBaseProvider implements PageProvider {
-    private final BrokerPageProvider pageProvider = new BrokerPageProvider();
+
+    @Resource(name = "brokerPageProvider")
+    private BrokerPageProvider pageProvider;
     private final static Logger LOG = LoggerFactory.getLogger(TridionPageProvider.class);
 
     private static final TridionPageProvider INSTANCE = new TridionPageProvider();
 
     private TridionPageProvider () {
 
+    }
+
+    public BrokerPageProvider getPageProvider () {
+        return pageProvider;
+    }
+
+    public void setPageProvider (final BrokerPageProvider pageProvider) {
+        this.pageProvider = pageProvider;
     }
 
     public static TridionPageProvider getInstance () {

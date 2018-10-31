@@ -4,7 +4,36 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- Change here for infinispan -->
-    <bean id="cacheProvider" class="org.dd4t.core.providers.EHCacheProvider" />
+    <bean id="cacheProvider" class="org.dd4t.core.providers.EHCacheProvider" scope="singleton" />
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list merge="true">
+                <value>classpath:dd4trs.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="brokerBinaryProvider" class="org.dd4t.providers.impl.BrokerBinaryProvider">
+        <property name="cacheProvider" ref="cacheProvider" />
+        <property name="contentIsCompressed" value="${providers.contentiscompressed}" />
+    </bean>
+
+    <bean id="brokerComponentPresentationProvider" class="org.dd4t.providers.impl.BrokerComponentPresentationProvider">
+        <property name="cacheProvider" ref="cacheProvider" />
+        <property name="contentIsCompressed" value="${providers.contentiscompressed}" />
+    </bean>
+
+    <bean id="brokerPageProvider" class="org.dd4t.providers.impl.BrokerPageProvider">
+        <property name="cacheProvider" ref="cacheProvider" />
+        <property name="contentIsCompressed" value="${providers.contentiscompressed}" />
+    </bean>
+
+    <bean id="tridionPageProvider" class="org.dd4t.providers.rs.TridionPageProvider">
+        <property name="pageProvider" ref="brokerPageProvider" />
+    </bean>
 
     <!-- TODO: add JMS listener -->
 
